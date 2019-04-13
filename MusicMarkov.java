@@ -21,7 +21,7 @@ class MusicMarkov {
 
 	MusicMarkov() {
 		noteMark = new double[13][13];
-		lengthMark = new double[6][6];
+		lengthMark = new double[7][7];
 		translateNote = new HashMap<Integer, String>();
 		translateRhythm = new HashMap<Integer, String>();
 
@@ -42,19 +42,18 @@ class MusicMarkov {
 		}
 
 		translateNote.put(0, "C");
-		translateNote.put(1, "C");
-		translateNote.put(2, "C#");
-		translateNote.put(3, "D");
-		translateNote.put(4, "D#");
-		translateNote.put(5, "E");
-		translateNote.put(6, "F");
-		translateNote.put(7, "F#");
-		translateNote.put(8, "G");
-		translateNote.put(9, "G#");
-		translateNote.put(10, "A");
-		translateNote.put(11, "A#");
-		translateNote.put(12, "B");
-		translateNote.put(13, "R");
+		translateNote.put(1, "C#");
+		translateNote.put(2, "D");
+		translateNote.put(3, "D#");
+		translateNote.put(4, "E");
+		translateNote.put(5, "F");
+		translateNote.put(6, "F#");
+		translateNote.put(7, "G");
+		translateNote.put(8, "G#");
+		translateNote.put(9, "A");
+		translateNote.put(10, "A#");
+		translateNote.put(11, "B");
+		translateNote.put(12, "R");
 
 		translateRhythm.put(0, "half");
 		translateRhythm.put(1, "quarter");
@@ -62,6 +61,7 @@ class MusicMarkov {
 		translateRhythm.put(3, "16th");
 		translateRhythm.put(4, "triplet quarter");
 		translateRhythm.put(5, "triplet 8th");
+		translateRhythm.put(6, "triplet 16th");
 	}
 
 	// Translates midi note number to text
@@ -88,13 +88,13 @@ class MusicMarkov {
 	void calcAverage(double[][] markov) {
 		int temp = 0;
 
-		for(int i = 0; i < noteMark.length; i++) {
-			for(int j = 0; j < noteMark[0].length; j++) { // Calculates column weight
-				temp += noteMark[i][j];
+		for(int i = 0; i < markov.length; i++) {
+			for(int j = 0; j < markov[0].length; j++) { // Calculates column weight
+				temp += markov[i][j];
 			}
 
-			for(int j = 0; j < noteMark[0].length; j++) { // Divides each column by total weight
-				noteMark[i][j] /= temp;
+			for(int j = 0; j < markov[0].length; j++) { // Divides each column by total weight
+				markov[i][j] /= temp;
 			}
 
 			temp = 0;
@@ -135,8 +135,14 @@ class MusicMarkov {
 		for(int i = 0; i < 2000; i++) {
 			test.putNote(Math.abs(a.nextInt() % 13), Math.abs(a.nextInt() % 13));
 		}
+
+		
+		for(int i = 0; i < 2000; i++) {
+			test.putRhythm(Math.abs(a.nextInt() % 7), Math.abs(a.nextInt() % 7));
+		}
 		
 		test.calcAverage(test.noteMark);
+		test.calcAverage(test.lengthMark);
 
 		test.exportMarkov();
 
