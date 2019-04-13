@@ -2,4 +2,8 @@ MidiFileReader (abstract type)
 
 Use getSequence(File file), returns a Sequence (abstract type).
 
-With our Sequence, getTrack to get the track from sequence. (Probably track 0)
+With our Sequence, getTracks to get the array of tracks, and then get the track from this array we need (Probably track 0).
+
+With the Track, iterate through each index to get each MidiEvent.
+
+From each MidiEvent, Find the pitch and note type (half note, quarter, eigth, triplet etc).  Compare what note is next, and add this date to the probability matrices for note changes and rhythmic changes.
