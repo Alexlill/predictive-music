@@ -8,6 +8,7 @@
 
 import java.util.*;
 import java.io.*;
+import javax.sound.midi.*;
 
 class MusicWriter {
 	// Fields
@@ -15,9 +16,10 @@ class MusicWriter {
 	int[][] lengthProbMark;
 	Random rand;
 
+	// Constructor
 	MusicWriter() {
 		noteProbMark = new int[13][13];
-		lengthProbMark = new int[7][7];
+		lengthProbMark = new int[8][8];
 		rand = new Random();
 
 		for(int i = 0; i < noteProbMark.length; i++) {
@@ -51,21 +53,63 @@ class MusicWriter {
 
 		return converted;
 	}
-
+ 
 	// Given the current note of the sequence, pick the next based on probability.
-	// Pre: noteProbMark and rhythmProbMark already converted using convertProbabilities()
-	int pickNote(int currentNote, MusicWriter writer) {
+	// Pre: noteProbMark and lengthProbMark already converted using convertProbabilities()
+	int pickNote(int currentNote) {
 		int random = rand.nextInt(1000000000);
 
 		int i = 0;
-		while(i < writer.noteProbMark[currentNote].length) {
-			if(writer.noteProbMark[currentNote][i] < random) {
+		while(i < this.noteProbMark[currentNote].length - 1) {
+			if(this.noteProbMark[i][currentNote] > random) {
+				System.out.println(i + ",");
+				return i - 1;
+			}
+			i++;
+		}
 			
-
-		while
-		return 0;
+		return 13;
 	}	
 
+	int pickRhythm(int currentRhythm) {
+		int random = rand.nextInt(1000000000);
+
+		int i = 0;
+		while(i < this.lengthProbMark[currentRhythm].length - 1) {
+			if(this.lengthProbMark[i][currentRhythm] > random) {
+				System.out.println(i + " ");
+				return i - 1;
+			}
+			i++;
+		}
+		return 8;
+	}
+
+
+
+	// Returns a given note in an octave appropriate for sax
+	// NOTE: MIGHT NEED TO PUT LOGIc
+	int octaveHelper(int note) {
+		// Lowest: Db3 = 59
+		// Highest: Ab5(?) = 80
+
+		return 0;
+	}
+
+	// Writes and outputs a song.
+	// PRE: noteProbMark and lengthProbMark already converted using convertProbabilities();
+	File writeSong() {
+		MidiTrack tempo = new MidiTrack();
+		MidiTrack notes = new MidiTrack();
+		TimeSignature normal = new TimeSignature();
+
+		normal.setTimeSignature(4, r, TimeSignature.DEFAULT_METER, TimeSignature.DEFAULT_DIVISION);
+		return null;	
+	}
+
+ 
+
+	///////////////////////////////////////////////////////////////////////////////////////
 	public static void main(String[] args) {
 		MusicWriter writer = new MusicWriter();
 		MusicMarkov test = new MusicMarkov();
@@ -83,6 +127,8 @@ class MusicWriter {
 		test.calcAverage(test.lengthMark);
 
 		writer.noteProbMark = writer.convertProbabilities(test.noteMark);
+		writer.lengthProbMark = writer.convertProbabilities(test.lengthMark);
+
 
 		for(int i = 0; i < writer.noteProbMark.length; i++) {
 			for(int j = 0; j < writer.noteProbMark[0].length; j++) {
@@ -90,10 +136,19 @@ class MusicWriter {
 			}
 			System.out.print("\n");
 		}
+	
+	System.out.println("\n\n\n");
+	
+	/*
+	for(int i = 0; i < 20; i++) {
+		writer.pickNote(i % 13);
+		System.out.println("\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\n");
+		writer.pickRhythm(i % 8);
+	}*/
+
+
+
 	}
-
-
-
 
 }
 	
