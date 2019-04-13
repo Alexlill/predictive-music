@@ -1,0 +1,5 @@
+MidiFileReader (abstract type)
+
+Use getSequence(File file), returns a Sequence (abstract type).
+
+With our Sequence, getTrack to get the track from sequence. (Probably track 0)
