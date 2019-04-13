@@ -1,9 +1,7 @@
-MidiFileReader (abstract type)
-
 Use getSequence(File file), returns a Sequence (abstract type).
 
 With our Sequence, getTracks to get the array of tracks, and then get the track from this array we need (Probably track 0).
 
 With the Track, iterate through each index to get each MidiEvent.
 
-From each MidiEvent, Find the note (a,b,c,d,e,f,g, or rest) and note type (half note, quarter, eigth, triplet etc).  Save this data to arrays in a file, to be read by musicMarkov.
+From each MidiEvent, Find the note (numbers 21-108 or rest) and note type (half note, quarter, eigth, triplet etc).  Save this data to arrays in a file, to be read by musicMarkov.
