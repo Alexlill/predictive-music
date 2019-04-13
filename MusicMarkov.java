@@ -8,6 +8,7 @@
 // HackACM 2019
 // 4/13/19
 //-------------------------------------------------------------------------
+
 import java.util.*;
 import java.io.*;
 
@@ -18,11 +19,27 @@ class MusicMarkov {
 	Map<Integer, String> translateNote; // Maps numbers to notes
     Map<Integer, String> translateRhythm; // Maps numbers to rhythms
 
-	musicMarkov(Object A) {
+	MusicMarkov() {
 		noteMark = new double[13][13];
 		lengthMark = new double[6][6];
 		translateNote = new HashMap<Integer, String>();
 		translateRhythm = new HashMap<Integer, String>();
+
+		
+		for(int i = 0; i < lengthMark.length; i++) {
+			for(int j = 0; j < lengthMark[1].length; j++) {
+				lengthMark[i][j] = 0;
+			}
+
+		}
+
+
+		for(int i = 0; i < noteMark.length; i++) {
+			for(int j = 0; j < noteMark[1].length; j++) {
+				noteMark[i][j] = 0;
+			}
+
+		}
 
 		translateNote.put(0, "C");
 		translateNote.put(1, "C");
@@ -37,6 +54,7 @@ class MusicMarkov {
 		translateNote.put(10, "A");
 		translateNote.put(11, "A#");
 		translateNote.put(12, "B");
+		translateNote.put(13, "R");
 
 		translateRhythm.put(0, "half");
 		translateRhythm.put(1, "quarter");
@@ -78,6 +96,8 @@ class MusicMarkov {
 			for(int j = 0; j < noteMark[0].length; j++) { // Divides each column by total weight
 				noteMark[i][j] /= temp;
 			}
+
+			temp = 0;
 		}
 	}
 
@@ -89,18 +109,40 @@ class MusicMarkov {
 			for(int j = 0; j < noteMark[0].length; j++) { // Adds each decimal
 				writer.write(noteMark[i][j] + ",");
 			}
+
+			writer.write("\n");
+
 		}
+		
+		writer.write("\n");
 
 		for(int i = 0; i < lengthMark.length; i++) {
-			for(int j = 0; i < lengthMark[0].length; j++) {
+			for(int j = 0; j < lengthMark[1].length; j++) {
 				writer.write(lengthMark[i][j] + ",");
 			}
+
+			writer.write("\n");
 		}
+
+		writer.close();
 
 	}
 
-	public static void main() {
+	public static void main(String[] args) throws IOException {
+		MusicMarkov test = new MusicMarkov();
+		Random a = new Random();
+
+		for(int i = 0; i < 2000; i++) {
+			test.putNote(Math.abs(a.nextInt() % 13), Math.abs(a.nextInt() % 13));
 		}
+		
+		test.calcAverage(test.noteMark);
+
+		test.exportMarkov();
+
+
+
+	}
 
 
 
