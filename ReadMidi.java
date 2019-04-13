@@ -34,9 +34,9 @@ public class ReadMidi{
 	MidiEvent nextEvent;                              // Declare MidiEvent to be used in loop
 	MidiMessage message;                              // Declare MidiMessage to be used in loop
 	int note;
-	int length;
+	double length;
 	int[] noteArray = new int[track.size()-10];       // Declare and initialize array for notes
-	int[] lengthArray = new int[track.size()-10];     // Declare and initialize array for note lengths
+	double[] lengthArray = new double[track.size()-10];     // Declare and initialize array for note lengths
 	int k = 0;                                        // Use for index of arrays
 	for (int i = 10; i < track.size()-1; i+=2){
 	    event = track.get(i);
@@ -46,7 +46,8 @@ public class ReadMidi{
 	    note = (note-21)%12;                          //Modulo to get the note no matter the octave. 0 = A, 1 - Bb, 2 = A...., 11 = G#
 	    noteArray[k] = note;
 	    
-	    length = (nextEvent.getTick() - event.getTick())/resolution;
+	    length = (double) (nextEvent.getTick() - event.getTick());
+	    length = length / resolution;
 	    lengthArray[k] = length;
 	    k++;
 	}
