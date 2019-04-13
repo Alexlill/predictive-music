@@ -6,4 +6,4 @@ With our Sequence, getTracks to get the array of tracks, and then get the track 
 
 With the Track, iterate through each index to get each MidiEvent.
 
-From each MidiEvent, Find the pitch and note type (half note, quarter, eigth, triplet etc).  Compare what note is next, and add this date to the probability matrices for note changes and rhythmic changes.
+From each MidiEvent, Find the note (a,b,c,d,e,f,g, or rest) and note type (half note, quarter, eigth, triplet etc).  Save this data to arrays in a file, to be read by musicMarkov.
