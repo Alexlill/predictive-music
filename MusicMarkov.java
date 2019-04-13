@@ -1,5 +1,5 @@
 //-------------------------------------------------------------------------
-// musicMarkov.java
+// MusicMarkov.java
 //
 // Takes input of parsed midi input and arranges into markov chains that represent
 // a probabilistic copy of the music of the given input.
@@ -9,13 +9,14 @@
 // 4/13/19
 //-------------------------------------------------------------------------
 import java.util.*;
+import java.io.*;
 
-class musicMarkov {
+class MusicMarkov {
 	// Fields
 	double[][] noteMark;
 	double[][] lengthMark;
-	Map<Integer, String> translateNote; //Maps numbers to notes
-    Map<Integer, String> translateRhythm;
+	Map<Integer, String> translateNote; // Maps numbers to notes
+    Map<Integer, String> translateRhythm; // Maps numbers to rhythms
 
 	musicMarkov(Object A) {
 		noteMark = new double[13][13];
@@ -70,15 +71,36 @@ class musicMarkov {
 		int temp = 0;
 
 		for(int i = 0; i < noteMark.length; i++) {
-			for(int j = 0; j < noteMark[].length; j++) { // Calculates column weight
+			for(int j = 0; j < noteMark[0].length; j++) { // Calculates column weight
 				temp += noteMark[i][j];
 			}
 
-			for(int j = 0; j < noteMark[].length; j++) { // Divides each column by total weight
+			for(int j = 0; j < noteMark[0].length; j++) { // Divides each column by total weight
 				noteMark[i][j] /= temp;
 			}
 		}
 	}
+
+	// Exports markov chains to a csv file for transfer and use
+	void exportMarkov() throws IOException {
+		BufferedWriter writer = new BufferedWriter(new FileWriter("markovData"));
+		
+		for(int i = 0; i < noteMark.length; i++) {
+			for(int j = 0; j < noteMark[0].length; j++) { // Adds each decimal
+				writer.write(noteMark[i][j] + ",");
+			}
+		}
+
+		for(int i = 0; i < lengthMark.length; i++) {
+			for(int j = 0; i < lengthMark[0].length; j++) {
+				writer.write(lengthMark[i][j] + ",");
+			}
+		}
+
+	}
+
+	public static void main() {
+		}
 
 
 
