@@ -18,7 +18,7 @@ class MusicWriter {
 	int[] lengthList;
 	Random rand;
 
-	MusicWriter() {
+	MusicWriter() throws FileNotFoundException, InvalidMidiDataException, IOException{
 		noteProbMark = new int[13][13];
 		lengthProbMark = new int[7][7];
 		noteList = new int[500];
@@ -93,25 +93,31 @@ class MusicWriter {
 
 	// Writes a song based on current calculated probabilities.
 	// PRE: noteProbMark and lengthProbMark already converted with convertProbabilities.
-	void writeSong() throws FileNotFoundException, InvalidMidiDataException, IOException {
-	    int resolution = 480
+    void writeSong(int[] noteList, int[] lengthList) throws FileNotFoundException, InvalidMidiDataException, IOException {
+	    int resolution = 480;
 	    Sequence sequence = new Sequence(0, resolution,1);
 	    Track track = sequence.getTracks()[0];
-	    int tick = 0; //This will be used to find the cumulative ticks over the time of the song
+	    long tick = 0; //This will be used to find the cumulative ticks over the time of the song
 	    int i = 0;
+	    int j = 0;
 	    while (i < 10){
 		if (noteList[i] == 12){
-		    tick += resolution * lengthList[i];
+		    tick +=  lengthList[i] / resolution;
 		}
 		else{
-		    Byte[] byteArray = new byte[3]; 
-		    byteArray[0] = -112;
-		    byte;
-		    MidiMessage = new MidiMessage(byteArray);
-
+		    MidiMessage messageStart = new ShortMessage(-112,noteList[i]+69,80);
+		    MidiEvent noteStart = new MidiEvent(messageStart, tick);
+		    tick += (resolution * lengthList[i]);
+		    MidiMessage messageEnd = new ShortMessage(-112,noteList[i]+69,0);
+		    MidiEvent noteEnd = new MidiEvent(messageEnd, tick);
+		    tick += resolution * .05;
+		    track.add(noteStart);
+		    track.add(noteEnd);
 		}
+		i++;
 	    }
-		
+	    FileOutputStream file = new FileOutputStream("out.mid");
+	    MidiSystem.write(sequence, 0, file);
 	}
 
 	// Creates an array of notes and rhythms to be used in song creation.
@@ -122,22 +128,10 @@ class MusicWriter {
 			noteList[i] = pickNote(noteList[i-1]);
 			lengthList[i] = pickRhythm(lengthList[i-1]);
 		}
-		public class Inventory {     
-		    private int[] itemNumbers; //array2
-		    private String[] itemNames; //array1
-
-		    public Inventory(int[] itemNumbers, String[] itemNames)
-		    {
-			this.itemNumbers = itemNumbers;
-			this.itemNames = itemNames;
-		    }
-
-		    //Setters + getters. Etc.
-		}
 	}
 
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws FileNotFoundException, InvalidMidiDataException, IOException{
 		MusicWriter writer = new MusicWriter();
 		MusicMarkov test = new MusicMarkov();
 		Random a = new Random();
@@ -175,7 +169,7 @@ class MusicWriter {
 	}
 
 
-
+	writer.writeSong(writer.noteList, writer.lengthList);
 	}
 }
 	
