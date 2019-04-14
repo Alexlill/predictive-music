@@ -1,9 +1,8 @@
 # HACKACM 2019
 # Alex Lill and Tyler Batistic
 # Predictive Music
-# Generates midi music files based on markov chains generate from input midi files.
-# In this example, a selection of Charlie Parker midis are used to generate markov chains based on his playing tendencies
-# This is used to generate procedurally generated midi files.
+# Deconstructs and parses .mid files and inputs data into Markov chains, which are then used to algorithmically generate new MIDI files which are characteristic of their input.
+# We use a selection of Charlie Parker MIDI files, whose data is collected, processed, and used to generate jazz-influenced compositions.
 
 # INSTRUCTIONS:
-# Compile ReadMidi.java to ReadMidi.class, MusicMarkov.java to MusicMarkov.class, and MusicWriter.java to MusicWriter.class, with MusicWriter being last as it is the main.  After this, use "java MusicWriter" to generate out.midi. 
+# Compile ReadMidi.java, MusicMarkov.java, and MusicWriter.java. Main is inside MusicWriter. After running, a new file, out.mid, will be generated and saved within the same directory as the code files. It can then be opened by interpreters.
