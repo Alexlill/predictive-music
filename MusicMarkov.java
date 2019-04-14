@@ -8,10 +8,8 @@
 // HackACM 2019
 // 4/13/19
 //-------------------------------------------------------------------------
-
 import java.util.*;
 import java.io.*;
-import android-midi-lib;
 
 class MusicMarkov {
 	// Fields
@@ -22,7 +20,7 @@ class MusicMarkov {
 
 	MusicMarkov() {
 		noteMark = new double[13][13];
-		lengthMark = new double[8][8];
+		lengthMark = new double[7][7];
 		translateNote = new HashMap<Integer, String>();
 		translateRhythm = new HashMap<Integer, String>();
 
@@ -63,7 +61,6 @@ class MusicMarkov {
 		translateRhythm.put(4, "triplet quarter");
 		translateRhythm.put(5, "triplet 8th");
 		translateRhythm.put(6, "triplet 16th");
-		translateRhythm.put(6, "dotter quarter");
 	}
 
 	// Translates midi note number to text
