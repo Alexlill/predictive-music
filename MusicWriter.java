@@ -182,13 +182,18 @@ class MusicWriter {
 		MusicWriter writer = new MusicWriter();
 		Random a = new Random();
 		List<String> names = new ArrayList<String>();
-		String path = new File(".").getCanonicalPath();
 
-		names.add(path + "/Another_Hairdo.mid/");
-		names.add(path + "/Anthropology.mid/");
-		names.add(path + "/Au_Privave_1.mid/");
+		names.add("Another_Hairdo.mid");
+		names.add("Anthropology.mid");
+		names.add("Au_Private_1.mid");
+		names.add("Au_Private_2.mid");
+		names.add("Bird_Gets_The_Worm.mid");
+		names.add("Bloomdido.mid");
+		names.add("Chasing_The_Bird.mid");
+		names.add("Confirmation.mid");
+		names.add("Yardbird_Suite.mid");
 
-		System.out.println(new File(".").getCanonicalPath());
+
 
 		for(int j = 0; j < names.size(); j++) {
 			reader = new ReadMidi(names.get(j));		
