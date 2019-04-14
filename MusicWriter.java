@@ -177,15 +177,18 @@ class MusicWriter {
 
 
 	public static void main(String[] args) throws FileNotFoundException, InvalidMidiDataException, IOException{
-		ReadMidi reader = new ReadMidi("Yardbird_Suite.mid");
+		ReadMidi reader = new ReadMidi("Donna_Lee.mid");
 		MusicMarkov test = new MusicMarkov();
 		MusicWriter writer = new MusicWriter();
 		Random a = new Random();
 		List<String> names = new ArrayList<String>();
+		String path = new File(".").getCanonicalPath();
 
-		names.add("/songs/Another_Hairdo.mid");
-		names.add("/songs/Anthropology.mid");
-		names.add("/songs/Au_Privave_1.mid");
+		names.add(path + "/Another_Hairdo.mid/");
+		names.add(path + "/Anthropology.mid/");
+		names.add(path + "/Au_Privave_1.mid/");
+
+		System.out.println(new File(".").getCanonicalPath());
 
 		for(int j = 0; j < names.size(); j++) {
 			reader = new ReadMidi(names.get(j));		
