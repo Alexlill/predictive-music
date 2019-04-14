@@ -119,22 +119,44 @@ class MusicWriter {
 	    int note;
 	    int i = 0;
 	    int j = 0;
-	    while (i < 20){
+	    MidiMessage messageStart;
+	    MidiMessage messageEnd;
+	    MidiEvent noteStart;
+	    MidiEvent noteEnd;
+	    while (i < 250){
 		if (noteList[i] == 12){
 		    tick +=  lengthFinder(lengthList[i], resolution);
 		}
 		else{
 		    if(i > 0){
 			note = octaveHelper(noteList[i-1], noteList[i]) + 69;
+			
 		    }
 		    else{
 			note = noteList[i]+69;
 		    }
-		    MidiMessage messageStart = new ShortMessage(-112,note,80);
-		    MidiEvent noteStart = new MidiEvent(messageStart, tick);
+		    if(lengthList[i] == 5)
+		    {
+			messageStart = new ShortMessage(-112,note,80);
+			noteStart = new MidiEvent(messageStart, tick);
+			tick += lengthFinder(lengthList[i], resolution);
+			messageEnd = new ShortMessage(-112,note,0);
+			noteEnd = new MidiEvent(messageEnd, tick - 20);
+			track.add(noteStart);
+			track.add(noteEnd);
+			messageStart = new ShortMessage(-112,note,80);
+			noteStart = new MidiEvent(messageStart, tick);
+			tick += lengthFinder(lengthList[i], resolution);
+			messageEnd = new ShortMessage(-112,note,0);
+			noteEnd = new MidiEvent(messageEnd, tick - 20);
+			track.add(noteStart);
+			track.add(noteEnd);			  
+		    }
+		    messageStart = new ShortMessage(-112,note,80);
+		    noteStart = new MidiEvent(messageStart, tick);
 		    tick += lengthFinder(lengthList[i], resolution);
-		    MidiMessage messageEnd = new ShortMessage(-112,note,0);
-		    MidiEvent noteEnd = new MidiEvent(messageEnd, tick - 20);
+		    messageEnd = new ShortMessage(-112,note,0);
+		    noteEnd = new MidiEvent(messageEnd, tick - 20);
 		    track.add(noteStart);
 		    track.add(noteEnd);
 		}
@@ -142,7 +164,7 @@ class MusicWriter {
 	    }
 	    FileOutputStream file = new FileOutputStream("out.mid");
 	    MidiSystem.write(sequence, 0, file);
-	}
+    }
 
     int lengthFinder(int noteLength, int resolution){
 	switch (noteLength){
@@ -159,7 +181,7 @@ class MusicWriter {
 	    case 5:
 		return resolution/3;
 	    case 6:
-		return resolution/3;
+		return resolution/2;
 	    case 7:
 		return resolution + resolution/2;
 	}
