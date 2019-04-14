@@ -5,19 +5,30 @@
 // midi files based on the calculated probabilities.
 //
 //---------------------------------------------------------------------------------------------
+//
 import javax.sound.midi.*;
 import java.util.*;
 import java.io.*;
+
 class MusicWriter {
 	// Fields
 	int[][] noteProbMark;
 	int[][] lengthProbMark;
+	int[] noteList;
+	int[] lengthList;
 	Random rand;
 
 	MusicWriter() {
 		noteProbMark = new int[13][13];
 		lengthProbMark = new int[7][7];
+		noteList = new int[500];
+		lengthList = new int[500];
 		rand = new Random();
+
+		for(int i = 0; i < 500; i++) {
+			noteList[i] = 0;
+			lengthList[i] = 0;
+		}
 
 		for(int i = 0; i < noteProbMark.length; i++) {
 			for(int j = 0; j < noteProbMark[0].length; j++) {
@@ -57,10 +68,10 @@ class MusicWriter {
 		int random = rand.nextInt(1000000000);
 
 		int i = 0;
-		while(i < this.noteProbMark[currentNote].length - 1) {
+		while(i < (this.noteProbMark[currentNote].length) ) {
 			if(this.noteProbMark[i][currentNote] > random) {
 				System.out.println(i);
-				return i-1;
+				return i;
 			}
 			i++;
 		}
@@ -71,9 +82,9 @@ class MusicWriter {
 		int random = rand.nextInt(1000000000);
 
 		int i = 0;
-		while(i < this.lengthProbMark[currentRhythm].length -1) {
+		while(i < this.lengthProbMark[currentRhythm].length) {
 			if(this.lengthProbMark[i][currentRhythm] > random) {
-				return i-1;
+				return i;
 			}
 			i++;
 		}
@@ -83,11 +94,21 @@ class MusicWriter {
 	// Writes a song based on current calculated probabilities.
 	// PRE: noteProbMark and lengthProbMark already converted with convertProbabilities.
 	void writeSong() {
-		Sequence s = new Sequence(javax.sound.midi.Sequence.PPQ,24);
-		Track t = s.createTrack();
 
 		
 	}
+
+	// Creates an array of notes and rhythms to be used in song creation.
+	// PRE: noteProbMark and lengthProbMark already converted with convertProbabilities().
+	void initNotes() {
+		noteList[0] = lengthList[0] = rand.nextInt(6);
+		for(int i = 1; i < noteList.length; i++) {
+			noteList[i] = pickNote(noteList[i-1]);
+			lengthList[i] = pickRhythm(lengthList[i-1]);
+		}
+
+	}
+
 
 	public static void main(String[] args) {
 		MusicWriter writer = new MusicWriter();
@@ -106,6 +127,7 @@ class MusicWriter {
 		test.calcAverage(test.lengthMark);
 
 		writer.noteProbMark = writer.convertProbabilities(test.noteMark);
+		writer.lengthProbMark = writer.convertProbabilities(test.noteMark);
 
 		for(int i = 0; i < writer.noteProbMark.length; i++) {
 			for(int j = 0; j < writer.noteProbMark[0].length; j++) {
@@ -115,10 +137,15 @@ class MusicWriter {
 		}
 	
 
-	for(int i = 0; i < 20; i++) {
-		writer.pickNote(i % 13);
-	}
+	writer.initNotes();
 
+	for(int i = 0; i < writer.noteList.length; i++) {
+		System.out.print(writer.noteList[i] + " ");
+	}
+	System.out.println("\n\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\");
+	for(int i = 0; i < writer.lengthList.length; i++) {
+		System.out.print(writer.lengthList[i] + " ");
+	}
 
 
 
