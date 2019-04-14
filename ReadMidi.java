@@ -17,20 +17,6 @@ public class ReadMidi{
     public int[] lengthArray;
     
     ReadMidi(String filepath)  throws FileNotFoundException, InvalidMidiDataException, IOException {
-	List<String> results = new ArrayList<String>();
-
-	File[] files = new File(System.getProperty("user.dir" + "/songs/")).listFiles();
-
-	for(File file : files) {
-	if(file.isFile()) {
-		results.add(file.getName());
-		}
-	}
-
-	for(int i = 0; i < results.size(); i++) {
-		System.out.println(results.get(i));
-	}
-
 
 	FileInputStream file = new FileInputStream(filepath); //Load file into input stream
 	Sequence sequence = MidiSystem.getSequence(file);     //Open
