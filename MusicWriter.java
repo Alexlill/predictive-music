@@ -194,12 +194,20 @@ class MusicWriter {
 		names.add("Yardbird_Suite.mid");
 
 
+		test.putNote(1, 2);
+		test.putRhythm(1, 2);
 
 		for(int j = 0; j < names.size(); j++) {
 			reader = new ReadMidi(names.get(j));		
-			for(int i = 0; i < reader.noteArray.length - 1; i++) {
-				test.putNote(1, reader.noteArray[i]);
-				test.putRhythm(1, reader.lengthArray[i]);
+			for(int i = 1; i < reader.noteArray.length - 1; i++) {
+				test.putNote(reader.noteArray[i-1], reader.noteArray[i]);
+				test.putRhythm(reader.lengthArray[i-1], reader.lengthArray[i]);
+			}
+		}
+
+		for(int i = 0; i < test.noteMark.length; i++) {
+			for(int j = 0; j < test.noteMark.length; j++) {
+				System.out.print(test.noteMark[i][j] + " ");
 			}
 		}
 
