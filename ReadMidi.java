@@ -13,12 +13,10 @@ import java.io.*;
 import javax.sound.midi.*;
 
 public class ReadMidi{
+    public int[] noteArray;
+    public int[] lengthArray;
     
-    public static void main(String[] args){
-	openMidi("Yardbird_Suite.mid");
-    }
-    
-    public static void openMidi(String filepath){
+    ReadMidi(String filepath)  throws FileNotFoundException, InvalidMidiDataException, IOException {
 	FileInputStream file = new FileInputStream(filepath); //Load file into input stream
 	Sequence sequence = MidiSystem.getSequence(file);     //Open
 	file.close();                                         // Close the FileInputStream
@@ -29,7 +27,8 @@ public class ReadMidi{
 	parseNotes(track, resolution);                        // Turn this track into a set of arrays of notes and timing
     }
     
-    public static int[][] parseNotes(Track track, int resolution){
+    
+    public void parseNotes(Track track, int resolution){
 	MidiEvent event;                                  // Declare MidiEvent to be used in loop
 	MidiEvent nextEvent;                              // Declare MidiEvent to be used in loop
 	MidiMessage message;                              // Declare MidiMessage to be used in loop
@@ -58,21 +57,15 @@ public class ReadMidi{
 	    }
 	    k++;
 	}
-	int[] noteArray = new int[k];
-	int[] lengthArray = new int[k];
-	for(i = 0; i < k; i++){
+	noteArray = new int[k];
+	lengthArray = new int[k];
+	for(int i = 0; i < k; i++){
 	    lengthArray[i] = lengthArrayLong[i];
 	    noteArray[i] = noteArrayLong[i];
 	}
-	int[][] twoArrays = int[][];
-	int[0] = noteArray;
-	int[1] = lengthArray;
-	System.out.println(Arrays.toString(noteArray));
-	System.out.println(Arrays.toString(lengthArray));
-	return twoArrays;
     }
 
-
+    // Used to find the length of notes or rests
     public static int calculateLength(double length){
 	//length = length / resolution;
 	if (length < 0.19){
@@ -99,5 +92,12 @@ public class ReadMidi{
 	else{
 	    return 0; // Half note
 	}
+    }
+
+    //Main function for testing
+    public static void main(String[] args)  throws FileNotFoundException, InvalidMidiDataException, IOException {
+	ReadMidi reader = new ReadMidi("Yardbird_Suite.mid");
+	System.out.println(Arrays.toString(reader.noteArray));
+	System.out.println(Arrays.toString(reader.lengthArray));
     }
 }
