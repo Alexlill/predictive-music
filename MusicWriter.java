@@ -177,17 +177,25 @@ class MusicWriter {
 
 
 	public static void main(String[] args) throws FileNotFoundException, InvalidMidiDataException, IOException{
-		MusicWriter writer = new MusicWriter();
+		ReadMidi reader = new ReadMidi("Yardbird_Suite.mid");
 		MusicMarkov test = new MusicMarkov();
+		MusicWriter writer = new MusicWriter();
 		Random a = new Random();
+		List<String> names = new ArrayList<String();
 
-		for(int i = 0; i < 2000; i++) {
-			test.putNote(Math.abs(a.nextInt() % 13), Math.abs(a.nextInt() % 13));
+		names.add("Another_Hairdo.mid");
+		names.add("Anthropology.mid");
+		names.add("Au_Privave_1.mid");
+
+		for(int j = 0; j < names.length; j++) {
+			
+			for(int i = 0; i < reader.noteArray.length - 1; i++) {
+				test.putNote(1, reader.noteArray[i]);
+				test.putRhythm(1, reader.lengthArray[i]);
+			}
 		}
 
-		for(int i = 0; i < 2000; i++) {
-			test.putRhythm(Math.abs(a.nextInt() % 7), Math.abs(a.nextInt() % 7));
-		}
+		
 
 		test.calcAverage(test.noteMark);
 		test.calcAverage(test.lengthMark);
