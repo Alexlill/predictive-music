@@ -5,21 +5,18 @@
 // midi files based on the calculated probabilities.
 //
 //---------------------------------------------------------------------------------------------
-
+import javax.sound.midi.*;
 import java.util.*;
 import java.io.*;
-import javax.sound.midi.*;
-
 class MusicWriter {
 	// Fields
 	int[][] noteProbMark;
 	int[][] lengthProbMark;
 	Random rand;
 
-	// Constructor
 	MusicWriter() {
 		noteProbMark = new int[13][13];
-		lengthProbMark = new int[8][8];
+		lengthProbMark = new int[7][7];
 		rand = new Random();
 
 		for(int i = 0; i < noteProbMark.length; i++) {
@@ -53,7 +50,7 @@ class MusicWriter {
 
 		return converted;
 	}
- 
+
 	// Given the current note of the sequence, pick the next based on probability.
 	// Pre: noteProbMark and lengthProbMark already converted using convertProbabilities()
 	int pickNote(int currentNote) {
@@ -62,54 +59,36 @@ class MusicWriter {
 		int i = 0;
 		while(i < this.noteProbMark[currentNote].length - 1) {
 			if(this.noteProbMark[i][currentNote] > random) {
-				System.out.println(i + ",");
-				return i - 1;
+				System.out.println(i);
+				return i-1;
 			}
 			i++;
 		}
-			
-		return 13;
-	}	
+		return 0;
+	}
 
 	int pickRhythm(int currentRhythm) {
 		int random = rand.nextInt(1000000000);
 
 		int i = 0;
-		while(i < this.lengthProbMark[currentRhythm].length - 1) {
+		while(i < this.lengthProbMark[currentRhythm].length -1) {
 			if(this.lengthProbMark[i][currentRhythm] > random) {
-				System.out.println(i + " ");
-				return i - 1;
+				return i-1;
 			}
 			i++;
 		}
-		return 8;
+		return 1;
 	}
 
+	// Writes a song based on current calculated probabilities.
+	// PRE: noteProbMark and lengthProbMark already converted with convertProbabilities.
+	void writeSong() {
+		Sequence s = new Sequence(javax.sound.midi.Sequence.PPQ,24);
+		Track t = s.createTrack();
 
-
-	// Returns a given note in an octave appropriate for sax
-	// NOTE: MIGHT NEED TO PUT LOGIc
-	int octaveHelper(int note) {
-		// Lowest: Db3 = 59
-		// Highest: Ab5(?) = 80
-
-		return 0;
+		
 	}
 
-	// Writes and outputs a song.
-	// PRE: noteProbMark and lengthProbMark already converted using convertProbabilities();
-	File writeSong() {
-		MidiTrack tempo = new MidiTrack();
-		MidiTrack notes = new MidiTrack();
-		TimeSignature normal = new TimeSignature();
-
-		normal.setTimeSignature(4, r, TimeSignature.DEFAULT_METER, TimeSignature.DEFAULT_DIVISION);
-		return null;	
-	}
-
- 
-
-	///////////////////////////////////////////////////////////////////////////////////////
 	public static void main(String[] args) {
 		MusicWriter writer = new MusicWriter();
 		MusicMarkov test = new MusicMarkov();
@@ -127,8 +106,6 @@ class MusicWriter {
 		test.calcAverage(test.lengthMark);
 
 		writer.noteProbMark = writer.convertProbabilities(test.noteMark);
-		writer.lengthProbMark = writer.convertProbabilities(test.lengthMark);
-
 
 		for(int i = 0; i < writer.noteProbMark.length; i++) {
 			for(int j = 0; j < writer.noteProbMark[0].length; j++) {
@@ -137,19 +114,15 @@ class MusicWriter {
 			System.out.print("\n");
 		}
 	
-	System.out.println("\n\n\n");
-	
-	/*
+
 	for(int i = 0; i < 20; i++) {
 		writer.pickNote(i % 13);
-		System.out.println("\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\n");
-		writer.pickRhythm(i % 8);
-	}*/
+	}
+
 
 
 
 	}
-
 }
 	
 
