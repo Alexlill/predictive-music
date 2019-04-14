@@ -93,8 +93,24 @@ class MusicWriter {
 
 	// Writes a song based on current calculated probabilities.
 	// PRE: noteProbMark and lengthProbMark already converted with convertProbabilities.
-	void writeSong() {
+	void writeSong() throws FileNotFoundException, InvalidMidiDataException, IOException {
+	    int resolution = 480
+	    Sequence sequence = new Sequence(0, resolution,1);
+	    Track track = sequence.getTracks()[0];
+	    int tick = 0; //This will be used to find the cumulative ticks over the time of the song
+	    int i = 0;
+	    while (i < 10){
+		if (noteList[i] == 12){
+		    tick += resolution * lengthList[i];
+		}
+		else{
+		    Byte[] byteArray = new byte[3]; 
+		    byteArray[0] = -112;
+		    byte;
+		    MidiMessage = new MidiMessage(byteArray);
 
+		}
+	    }
 		
 	}
 
@@ -106,7 +122,18 @@ class MusicWriter {
 			noteList[i] = pickNote(noteList[i-1]);
 			lengthList[i] = pickRhythm(lengthList[i-1]);
 		}
+		public class Inventory {     
+		    private int[] itemNumbers; //array2
+		    private String[] itemNames; //array1
 
+		    public Inventory(int[] itemNumbers, String[] itemNames)
+		    {
+			this.itemNumbers = itemNumbers;
+			this.itemNames = itemNames;
+		    }
+
+		    //Setters + getters. Etc.
+		}
 	}
 
 
