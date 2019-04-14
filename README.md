@@ -6,4 +6,4 @@
 # This is used to generate procedurally generated midi files.
 
 # INSTRUCTIONS:
-# Compile 
+# Compile ReadMidi.java to ReadMidi.class, MusicMarkov.java to MusicMarkov.class, and MusicWriter.java to MusicWriter.class, with MusicWriter being last as it is the main.  After this, use "java MusicWriter" to generate out.midi. 
