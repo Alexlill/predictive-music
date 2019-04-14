@@ -17,6 +17,21 @@ public class ReadMidi{
     public int[] lengthArray;
     
     ReadMidi(String filepath)  throws FileNotFoundException, InvalidMidiDataException, IOException {
+	List<String> results = new ArrayList<String>();
+
+	File[] files = new File(System.getProperty("user.dir" + "/songs/")).listFiles();
+
+	for(File file : files) {
+	if(file.isFile()) {
+		results.add(file.getName());
+		}
+	}
+
+	for(int i = 0; i < results.size(); i++) {
+		System.out.println(results.get(i));
+	}
+
+
 	FileInputStream file = new FileInputStream(filepath); //Load file into input stream
 	Sequence sequence = MidiSystem.getSequence(file);     //Open
 	file.close();                                         // Close the FileInputStream
@@ -25,7 +40,8 @@ public class ReadMidi{
 	Track[] trackArray = sequence.getTracks();            // Get array of track from Midi Sequence
 	Track track = trackArray[0];                          // Retrieve the solo instrumental track we need
 	parseNotes(track, resolution);                        // Turn this track into a set of arrays of notes and timing
-    }
+    
+	}
     
     
     public void parseNotes(Track track, int resolution){
@@ -33,8 +49,9 @@ public class ReadMidi{
 	MidiEvent nextEvent;                              // Declare MidiEvent to be used in loop
 	MidiMessage message;                              // Declare MidiMessage to be used in loop
 	int note;                                         // Declare int for note in loop
-	//double length;                                    // Declare length in double (to calculate) in loop
-        int[] noteArrayLong = new int[track.size()-10];       // Declare and initialize array for notes
+	
+
+    int[] noteArrayLong = new int[track.size()-10];       // Declare and initialize array for notes
 	int[] lengthArrayLong = new int[track.size()-10];     // Declare and initialize array for note lengths
 	int k = 0;                                        // Use for index of arrays
 	for (int i = 10; i < track.size()-1; i+=2){
