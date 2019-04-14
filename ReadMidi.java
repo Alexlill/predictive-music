@@ -14,29 +14,29 @@ import javax.sound.midi.*;
 
 public class ReadMidi{
     
-    public static void main(String[] args) throws FileNotFoundException, InvalidMidiDataException, IOException {
+    public static void main(String[] args){
 	openMidi("Yardbird_Suite.mid");
     }
     
-    public static void openMidi(String filepath) throws FileNotFoundException, InvalidMidiDataException, IOException {
+    public static void openMidi(String filepath){
 	FileInputStream file = new FileInputStream(filepath); //Load file into input stream
-	Sequence sequence = MidiSystem.getSequence(file); //Open
-	file.close();                                     // Close the FileInputStream
-	int resolution = sequence.getResolution();        // The "tempo" in ticks per quarter note	
+	Sequence sequence = MidiSystem.getSequence(file);     //Open
+	file.close();                                         // Close the FileInputStream
+	int resolution = sequence.getResolution();            // The "tempo" in ticks per quarter note	
 	
-	Track[] trackArray = sequence.getTracks();        // Get array of track from Midi Sequence
-	Track track = trackArray[0];                      // Retrieve the solo instrumental track we need
-	parseNotes(track, resolution);                                // Turn this track into a set of arrays of notes and timing
-    }    
+	Track[] trackArray = sequence.getTracks();            // Get array of track from Midi Sequence
+	Track track = trackArray[0];                          // Retrieve the solo instrumental track we need
+	parseNotes(track, resolution);                        // Turn this track into a set of arrays of notes and timing
+    }
     
-    public static void parseNotes(Track track, int resolution){
+    public static int[][] parseNotes(Track track, int resolution){
 	MidiEvent event;                                  // Declare MidiEvent to be used in loop
 	MidiEvent nextEvent;                              // Declare MidiEvent to be used in loop
 	MidiMessage message;                              // Declare MidiMessage to be used in loop
-	int note;
-	double length;
-	int[] noteArray = new int[track.size()-10];       // Declare and initialize array for notes
-	double[] lengthArray = new double[track.size()-10];     // Declare and initialize array for note lengths
+	int note;                                         // Declare int for note in loop
+	//double length;                                    // Declare length in double (to calculate) in loop
+        int[] noteArrayLong = new int[track.size()-10];       // Declare and initialize array for notes
+	int[] lengthArrayLong = new int[track.size()-10];     // Declare and initialize array for note lengths
 	int k = 0;                                        // Use for index of arrays
 	for (int i = 10; i < track.size()-1; i+=2){
 	    event = track.get(i);
@@ -44,14 +44,60 @@ public class ReadMidi{
 
 	    note = (event.getMessage()).getMessage()[1];
 	    note = (note-21)%12;                          //Modulo to get the note no matter the octave. 0 = A, 1 - Bb, 2 = A...., 11 = G#
-	    noteArray[k] = note;
+	    noteArrayLong[k] = note;
 	    
-	    length = (double) (nextEvent.getTick() - event.getTick());
-	    length = length / resolution;
-	    lengthArray[k] = length;
+	    lengthArrayLong[k] = calculateLength(((double) (nextEvent.getTick() - event.getTick())) / (double) resolution);
+
+
+	    event = track.get(i+1);
+	    nextEvent = track.get(i+2);
+	    if (((double) (nextEvent.getTick() - event.getTick())) / (double) resolution > 1.4){
+		k++;
+		noteArrayLong[k] = 12;
+		lengthArrayLong[k] = calculateLength(((double) (nextEvent.getTick() - event.getTick())) / (double) resolution);	
+	    }
 	    k++;
 	}
+	int[] noteArray = new int[k];
+	int[] lengthArray = new int[k];
+	for(i = 0; i < k; i++){
+	    lengthArray[i] = lengthArrayLong[i];
+	    noteArray[i] = noteArrayLong[i];
+	}
+	int[][] twoArrays = int[][];
+	int[0] = noteArray;
+	int[1] = lengthArray;
 	System.out.println(Arrays.toString(noteArray));
 	System.out.println(Arrays.toString(lengthArray));
+	return twoArrays;
+    }
+
+
+    public static int calculateLength(double length){
+	//length = length / resolution;
+	if (length < 0.19){
+	    return 6; //Triplet sixteenth note
+	}
+	else if (length < 0.27){
+	    return 3; // Sixteenth note
+	}
+	else if (length < 0.38){
+	    return 5; // Triplet eighth note
+	}
+	else if (length < 0.54){
+	    return 2; // Eighth note
+	}
+	else if (length < 0.80){
+	    return 4; // Triplet Quarter note
+	}
+	else if (length < 1.20){
+	    return 1; // Quarter note
+	}
+	else if (length < 1.75){
+	    return 7; // Dotted half note
+	}
+	else{
+	    return 0; // Half note
+	}
     }
 }
