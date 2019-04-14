@@ -17,7 +17,7 @@ class MusicWriter {
 	int[] noteList;
 	int[] lengthList;
 	Random rand;
-
+    
 	MusicWriter() throws FileNotFoundException, InvalidMidiDataException, IOException{
 		noteProbMark = new int[13][13];
 		lengthProbMark = new int[7][7];
@@ -43,6 +43,25 @@ class MusicWriter {
 		}
 
 	}
+    int octaveHelper(int numPrev, int numNext) {
+	if((numNext % 12)  == 0) {
+	    return 12;
+	}
+	if((Math.abs(numPrev - numNext) % 12) > 5) {
+	    if(numNext - 6 < 66) {
+		return numNext;
+	    }
+	    else {
+		return numNext - 6;
+	    }	
+	}
+	else {
+	    if(numNext > 88) {
+		return numNext - 12;
+	    }
+	}
+	return numNext;
+    }
 
 	// Converts given array from probabilities to integers for easier random calculations.
 	int[][] convertProbabilities(double[][] arr) {
@@ -70,7 +89,6 @@ class MusicWriter {
 		int i = 0;
 		while(i < (this.noteProbMark[currentNote].length) ) {
 			if(this.noteProbMark[i][currentNote] > random) {
-				System.out.println(i);
 				return i;
 			}
 			i++;
@@ -94,23 +112,29 @@ class MusicWriter {
 	// Writes a song based on current calculated probabilities.
 	// PRE: noteProbMark and lengthProbMark already converted with convertProbabilities.
     void writeSong(int[] noteList, int[] lengthList) throws FileNotFoundException, InvalidMidiDataException, IOException {
-	    int resolution = 480;
+	    int resolution = 360;
 	    Sequence sequence = new Sequence(0, resolution,1);
 	    Track track = sequence.getTracks()[0];
 	    long tick = 0; //This will be used to find the cumulative ticks over the time of the song
+	    int note;
 	    int i = 0;
 	    int j = 0;
-	    while (i < 10){
+	    while (i < 20){
 		if (noteList[i] == 12){
-		    tick +=  lengthList[i] / resolution;
+		    tick +=  lengthFinder(lengthList[i], resolution);
 		}
 		else{
-		    MidiMessage messageStart = new ShortMessage(-112,noteList[i]+69,80);
+		    if(i > 0){
+			note = octaveHelper(noteList[i-1], noteList[i]) + 69;
+		    }
+		    else{
+			note = noteList[i]+69;
+		    }
+		    MidiMessage messageStart = new ShortMessage(-112,note,80);
 		    MidiEvent noteStart = new MidiEvent(messageStart, tick);
-		    tick += (resolution * lengthList[i]);
-		    MidiMessage messageEnd = new ShortMessage(-112,noteList[i]+69,0);
-		    MidiEvent noteEnd = new MidiEvent(messageEnd, tick);
-		    tick += resolution * .05;
+		    tick += lengthFinder(lengthList[i], resolution);
+		    MidiMessage messageEnd = new ShortMessage(-112,note,0);
+		    MidiEvent noteEnd = new MidiEvent(messageEnd, tick - 20);
 		    track.add(noteStart);
 		    track.add(noteEnd);
 		}
@@ -120,6 +144,27 @@ class MusicWriter {
 	    MidiSystem.write(sequence, 0, file);
 	}
 
+    int lengthFinder(int noteLength, int resolution){
+	switch (noteLength){
+	    case 0:
+		return resolution*2;
+	    case 1:
+		return resolution;
+	    case 2:
+		return resolution/2;
+	    case 3:
+		return resolution/4;
+	    case 4:
+		return (resolution*2)/3;
+	    case 5:
+		return resolution/3;
+	    case 6:
+		return resolution/3;
+	    case 7:
+		return resolution + resolution/2;
+	}
+	return resolution/2;
+    }
 	// Creates an array of notes and rhythms to be used in song creation.
 	// PRE: noteProbMark and lengthProbMark already converted with convertProbabilities().
 	void initNotes() {
@@ -149,27 +194,8 @@ class MusicWriter {
 
 		writer.noteProbMark = writer.convertProbabilities(test.noteMark);
 		writer.lengthProbMark = writer.convertProbabilities(test.noteMark);
-
-		for(int i = 0; i < writer.noteProbMark.length; i++) {
-			for(int j = 0; j < writer.noteProbMark[0].length; j++) {
-				System.out.print(writer.noteProbMark[i][j] + ",");
-			}
-			System.out.print("\n");
-		}
-	
-
-	writer.initNotes();
-
-	for(int i = 0; i < writer.noteList.length; i++) {
-		System.out.print(writer.noteList[i] + " ");
-	}
-	System.out.println("\n\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\");
-	for(int i = 0; i < writer.lengthList.length; i++) {
-		System.out.print(writer.lengthList[i] + " ");
-	}
-
-
-	writer.writeSong(writer.noteList, writer.lengthList);
+		writer.initNotes();
+		writer.writeSong(writer.noteList, writer.lengthList);
 	}
 }
 	
