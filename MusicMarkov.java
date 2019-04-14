@@ -127,6 +127,26 @@ class MusicMarkov {
 
 	}
 
+	int octaveHelper(int numPrev, int numNext) {
+		if((numNext % 12)  == 0) {
+			return 12;
+		}
+		if((Math.abs(numPrev - numNext) % 12) > 5) {
+			if(numNext - 6 < 66) {
+				return numNext;
+			}
+			else {
+				return numNext - 6;
+			}	
+		}
+		else {
+			if(numNext > 88) {
+				return numNext - 12;
+			}
+		}
+		return numNext;
+	}
+
 	public static void main(String[] args) throws IOException {
 		MusicMarkov test = new MusicMarkov();
 		Random a = new Random();
