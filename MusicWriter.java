@@ -181,14 +181,14 @@ class MusicWriter {
 		MusicMarkov test = new MusicMarkov();
 		MusicWriter writer = new MusicWriter();
 		Random a = new Random();
-		List<String> names = new ArrayList<String();
+		List<String> names = new ArrayList<String>();
 
-		names.add("Another_Hairdo.mid");
-		names.add("Anthropology.mid");
-		names.add("Au_Privave_1.mid");
+		names.add("/songs/Another_Hairdo.mid");
+		names.add("/songs/Anthropology.mid");
+		names.add("/songs/Au_Privave_1.mid");
 
-		for(int j = 0; j < names.length; j++) {
-			
+		for(int j = 0; j < names.size(); j++) {
+			reader = new ReadMidi(names.get(j));		
 			for(int i = 0; i < reader.noteArray.length - 1; i++) {
 				test.putNote(1, reader.noteArray[i]);
 				test.putRhythm(1, reader.lengthArray[i]);
