@@ -137,21 +137,57 @@ class MusicWriter {
 		    }
 		    if(lengthList[i] == 5)
 		    {
-			messageStart = new ShortMessage(-112,note,80);
-			noteStart = new MidiEvent(messageStart, tick);
-			tick += lengthFinder(lengthList[i], resolution);
-			messageEnd = new ShortMessage(-112,note,0);
-			noteEnd = new MidiEvent(messageEnd, tick - 20);
-			track.add(noteStart);
-			track.add(noteEnd);
-			messageStart = new ShortMessage(-112,note,80);
-			noteStart = new MidiEvent(messageStart, tick);
-			tick += lengthFinder(lengthList[i], resolution);
-			messageEnd = new ShortMessage(-112,note,0);
-			noteEnd = new MidiEvent(messageEnd, tick - 20);
-			track.add(noteStart);
-			track.add(noteEnd);			  
+				messageStart = new ShortMessage(-112,note,80);
+				noteStart = new MidiEvent(messageStart, tick);
+				tick += lengthFinder(lengthList[i], resolution);
+				messageEnd = new ShortMessage(-112,note,0);
+				noteEnd = new MidiEvent(messageEnd, tick - 20);
+				track.add(noteStart);
+				track.add(noteEnd);
+
+				note = noteList[i+1]+69;
+				messageStart = new ShortMessage(-112,note,80);
+				noteStart = new MidiEvent(messageStart, tick);
+				tick += lengthFinder(lengthList[i], resolution);
+				messageEnd = new ShortMessage(-112,note,0);
+				noteEnd = new MidiEvent(messageEnd, tick - 20);
+				track.add(noteStart);
+				track.add(noteEnd);
+
+				note = noteList[i+2]+69;
 		    }
+		    if(lengthList[i] == 3) {
+				messageStart = new ShortMessage(-112,note,80);
+				noteStart = new MidiEvent(messageStart, tick);
+				tick += lengthFinder(lengthList[i], resolution);
+				messageEnd = new ShortMessage(-112,note,0);
+				noteEnd = new MidiEvent(messageEnd, tick - 20);
+				track.add(noteStart);
+				track.add(noteEnd);
+
+				note = noteList[i+1]+69;
+
+				messageStart = new ShortMessage(-112,note,80);
+				noteStart = new MidiEvent(messageStart, tick);
+				tick += lengthFinder(lengthList[i], resolution);
+				messageEnd = new ShortMessage(-112,note,0);
+				noteEnd = new MidiEvent(messageEnd, tick - 20);
+				track.add(noteStart);
+				track.add(noteEnd);
+
+
+				note = noteList[i+2]+69;
+				messageStart = new ShortMessage(-112,note,80);
+				noteStart = new MidiEvent(messageStart, tick);
+				tick += lengthFinder(lengthList[i], resolution);
+				messageEnd = new ShortMessage(-112,note,0);
+				noteEnd = new MidiEvent(messageEnd, tick - 20);
+				track.add(noteStart);
+				track.add(noteEnd);
+
+				note = noteList[i+3]+69;
+
+			}
 		    messageStart = new ShortMessage(-112,note,80);
 		    noteStart = new MidiEvent(messageStart, tick);
 		    tick += lengthFinder(lengthList[i], resolution);
@@ -209,6 +245,21 @@ class MusicWriter {
 		names.add("Anthropology.mid");
 		names.add("Au_Private_1.mid");
 		names.add("Au_Private_2.mid");
+		names.add("Back_Home_Blues.mid");
+		names.add("Barbados.mid");
+		names.add("Billie's_Bounce.mid");
+		names.add("Blues_For_Alice.mid");
+		names.add("Buzzy.mid");
+		names.add("Card_Board.mid");
+		names.add("Celerity.mid");
+		names.add("Cheryl.mid");
+		names.add("Chi_Chi.mid");
+		names.add("Dewey_Square.mid");
+		names.add("Kim_1.mid");
+		names.add("Kim_2.mid");
+		names.add("My_Little_Suede_Shoes.mid");
+		names.add("Ornithology.mid");
+		names.add("Passport.mid");
 		names.add("Bird_Gets_The_Worm.mid");
 		names.add("Bloomdido.mid");
 		names.add("Chasing_The_Bird.mid");
